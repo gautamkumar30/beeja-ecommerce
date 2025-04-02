@@ -4,14 +4,14 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 export default function InsightsPage() {
-  const [description, setDescription] = useState("");
-  const [generatedTweet, setGeneratedTweet] = useState("");
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const generateTweet = async () => {
-    if (!description.trim()) {
-      setError("Please enter a description");
+  const getInsights = async () => {
+    if (!question.trim()) {
+      setError("Please enter a question");
       return;
     }
 
@@ -23,28 +23,20 @@ export default function InsightsPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ description }),
+        body: JSON.stringify({ question }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to generate tweet");
+        throw new Error(data.error || "Failed to get insights");
       }
 
-      setGeneratedTweet(data.tweet);
+      setAnswer(data.answer);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate tweet");
+      setError(err instanceof Error ? err.message : "Failed to get insights");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedTweet);
-    } catch (err) {
-      console.error("Failed to copy to clipboard:", err);
     }
   };
 
@@ -58,7 +50,7 @@ export default function InsightsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl font-bold text-gray-900"
           >
-            Tweet Generator
+            Product Insights
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: -10 }}
@@ -66,7 +58,7 @@ export default function InsightsPage() {
             transition={{ delay: 0.1 }}
             className="mt-2 text-gray-600"
           >
-            Generate engaging tweets for your products using AI
+            Ask questions about our products and get AI-powered insights
           </motion.p>
         </div>
 
@@ -80,25 +72,44 @@ export default function InsightsPage() {
           {/* Input Section */}
           <div>
             <label
-              htmlFor="description"
+              htmlFor="question"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Product Description
+              Your Question
             </label>
             <textarea
-              id="description"
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Enter your product description..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              id="question"
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+              placeholder="Ask anything about our products, e.g., 'What are our best-selling electronics?' or 'Which products are low in stock?'"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
             />
           </div>
 
-          {/* Generate Button */}
+          {/* Example Questions */}
+          <div className="flex flex-wrap gap-2">
+            <span className="text-xs text-gray-500">Example questions:</span>
+            {[
+              "What are our most expensive products?",
+              "Which categories have the most items?",
+              "Are there any products out of stock?",
+              "What's the average price in each category?",
+            ].map((q) => (
+              <button
+                key={q}
+                onClick={() => setQuestion(q)}
+                className="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2 py-1 rounded-full"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+
+          {/* Ask Button */}
           <div className="flex justify-center">
             <button
-              onClick={generateTweet}
+              onClick={getInsights}
               disabled={loading}
               className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -124,10 +135,10 @@ export default function InsightsPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Generating...
+                  Analyzing...
                 </>
               ) : (
-                "Generate Tweet"
+                "Get Insights"
               )}
             </button>
           </div>
@@ -143,37 +154,41 @@ export default function InsightsPage() {
             </motion.div>
           )}
 
-          {/* Generated Tweet */}
-          {generatedTweet && (
+          {/* AI Response */}
+          {answer && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-6"
             >
-              <div className="bg-gray-50 rounded-lg p-6 relative">
-                <h3 className="text-sm font-medium text-gray-900 mb-2">
-                  Generated Tweet
-                </h3>
-                <p className="text-gray-600">{generatedTweet}</p>
-                <button
-                  onClick={copyToClipboard}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-                  title="Copy to clipboard"
-                >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                    />
-                  </svg>
-                </button>
+              <div className="bg-gray-50 rounded-lg p-6">
+                <div className="flex items-center mb-4">
+                  <div className="flex-shrink-0">
+                    <svg
+                      className="h-6 w-6 text-indigo-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="ml-3 text-sm font-medium text-gray-900">
+                    AI Response
+                  </h3>
+                </div>
+                <div className="prose prose-sm max-w-none text-gray-600">
+                  {answer.split("\n").map((line, i) => (
+                    <p key={i} className="mb-2">
+                      {line}
+                    </p>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
@@ -187,13 +202,13 @@ export default function InsightsPage() {
           className="mt-12 text-center text-sm text-gray-500"
         >
           <h3 className="font-medium text-gray-900 mb-2">
-            Tips for better tweets:
+            Tips for better questions:
           </h3>
           <ul className="space-y-1">
-            <li>Keep descriptions clear and concise</li>
-            <li>Include key product features and benefits</li>
-            <li>Mention your target audience</li>
-            <li>Add relevant context about your brand</li>
+            <li>Ask about specific product categories</li>
+            <li>Inquire about pricing trends</li>
+            <li>Check stock availability</li>
+            <li>Compare products within categories</li>
           </ul>
         </motion.div>
       </div>
