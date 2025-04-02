@@ -6,10 +6,9 @@ import { motion } from "framer-motion";
 
 export default function PaymentSuccessPage() {
   useEffect(() => {
-    // Confetti effect
     const confetti = () => {
-      const colors = ["#FF69B4", "#00FFFF", "#7B68EE", "#FFD700"];
-      for (let i = 0; i < 100; i++) {
+      const colors = ["#4F46E5", "#818CF8", "#C7D2FE", "#E0E7FF"];
+      for (let i = 0; i < 50; i++) {
         createConfetti(colors[Math.floor(Math.random() * colors.length)]);
       }
     };
@@ -28,13 +27,13 @@ export default function PaymentSuccessPage() {
     };
 
     confetti();
-    const interval = setInterval(confetti, 3000); // Create new confetti every 3 seconds
+    const interval = setInterval(confetti, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-500 via-purple-500 to-pink-500 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center relative overflow-hidden">
       {/* Confetti container */}
       <div
         id="confetti-container"
@@ -43,20 +42,20 @@ export default function PaymentSuccessPage() {
 
       {/* Success Card */}
       <motion.div
-        initial={{ scale: 0.5, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5, type: "spring", bounce: 0.4 }}
-        className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl border border-white/20"
+        transition={{ duration: 0.5, type: "spring", bounce: 0.3 }}
+        className="w-full max-w-md mx-4 bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
       >
         {/* Success Icon */}
         <motion.div
           initial={{ scale: 0 }}
-          animate={{ scale: 1, rotate: 360 }}
+          animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
-          className="w-20 h-20 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full mx-auto flex items-center justify-center mb-6"
+          className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-6"
         >
           <svg
-            className="w-12 h-12 text-white"
+            className="w-8 h-8 text-green-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -75,72 +74,55 @@ export default function PaymentSuccessPage() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-center"
+          className="text-center space-y-4"
         >
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent mb-2">
-            Yaass! Payment Successful
+          <h1 className="text-2xl font-medium text-gray-900">
+            Payment Successful!
           </h1>
-          <p className="text-white/80 mb-8">
-            Your order is confirmed and will be shipped soon! 🚀
+          <p className="text-gray-500">
+            Thank you for your purchase. Your order has been confirmed.
           </p>
 
-          {/* Emojis Row */}
-          <div className="flex justify-center gap-4 mb-8 text-4xl">
-            <motion.span
-              initial={{ rotate: -45 }}
-              animate={{ rotate: 0 }}
-              transition={{ delay: 0.6, type: "spring" }}
-            >
-              🎉
-            </motion.span>
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.8 }}
-            >
-              💫
-            </motion.span>
-            <motion.span
-              initial={{ rotate: 45 }}
-              animate={{ rotate: 0 }}
-              transition={{ delay: 1, type: "spring" }}
-            >
-              ✨
-            </motion.span>
+          {/* Order Info */}
+          <div className="bg-gray-50 rounded-xl p-4 mt-6">
+            <div className="text-sm text-gray-600">
+              <p>Order confirmation and tracking details</p>
+              <p>have been sent to your email.</p>
+            </div>
           </div>
 
           {/* Buttons */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 mt-8">
             <Link
               href="/products"
-              className="bg-white/20 hover:bg-white/30 text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 backdrop-blur-sm"
+              className="inline-flex justify-center items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Continue Shopping
             </Link>
             <Link
               href="/orders"
-              className="text-white/80 hover:text-white underline underline-offset-4 font-medium transition-colors"
+              className="inline-flex justify-center items-center px-4 py-2.5 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               View Order Status
             </Link>
           </div>
         </motion.div>
       </motion.div>
+
+      <style jsx global>{`
+        .confetti {
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+          to {
+            transform: translateY(100vh) rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
-
-    // <style jsx global>{`
-    //   .confetti {
-    //     position: absolute;
-    //     width: 10px;
-    //     height: 10px;
-    //     animation: fall linear forwards;
-    //   }
-
-    //   @keyframes fall {
-    //     to {
-    //       transform: translateY(100vh) rotate(360deg);
-    //     }
-    //   }
-    // `}</style>
   );
 }

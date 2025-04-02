@@ -8,7 +8,6 @@ export async function POST(request: Request) {
     await dbConnect();
     const { firstName, lastName, email, password } = await request.json();
 
-    // Validate required fields
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
         { error: "All fields are required" },
@@ -16,7 +15,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
@@ -25,10 +23,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create new user
     const user = await User.create({
       firstName,
       lastName,
@@ -36,7 +32,6 @@ export async function POST(request: Request) {
       password: hashedPassword,
     });
 
-    // Remove password from response
     const userWithoutPassword = {
       _id: user._id,
       firstName: user.firstName,

@@ -10,12 +10,14 @@ export default async function ProductPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  console.log((await params).id);
-
   await dbConnect();
-  const product = (await Product.findById((await params).id)) as IProduct;
+  const productDoc = await Product.findById((await params).id);
 
-  console.log(product);
+  if (!productDoc) {
+    return <div>Product not found</div>;
+  }
+
+  const product = JSON.parse(JSON.stringify(productDoc));
 
   return <ProductDetails product={product} />;
 }
