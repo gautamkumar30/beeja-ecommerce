@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        fraunces: ["var(--font-fraunces)", "serif"],
+        fraunces: ["var(--font-fraunces)"],
+        inter: ["var(--font-inter)"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
