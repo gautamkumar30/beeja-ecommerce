@@ -53,7 +53,7 @@ const HowWeWork = () => {
     <section ref={sectionRef} className="py-20 bg-black text-white text-center">
       <h2 className="text-4xl font-bold mb-10">How We Work</h2>
       <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-        {["Step 1: Idea & Research", "Step 2: Design & Develop", "Step 3: Deliver & Optimize"].map((step, index) => (
+        {["Step 1: Best Quality", "Step 2: fastest delivery", "Step 3:Easy To Order"].map((step, index) => (
           <div
             key={index}
             ref={(el) => {

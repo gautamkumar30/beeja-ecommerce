@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Hero from "./_components/Hero";
 import HowWeWork from "./_components/HowweWork";
+import DummyTestimonials from "./_components/dummyTestimonials";
+import Footer from "./_components/Footer";
 
 export default function HomePage() {
   // const brands = [
@@ -17,6 +19,8 @@ export default function HomePage() {
     <main>
       <Hero/>
       <HowWeWork/>
+      <DummyTestimonials />
+      <Footer />
     </main>
  
   );
